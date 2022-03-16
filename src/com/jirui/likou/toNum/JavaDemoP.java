@@ -9,7 +9,7 @@ import org.junit.Test;
  */
 public class JavaDemoP {
     public static void main(String[] args) {
-        long l = myAtoi("   -42");
+        long l = myAtoi("  -4234324dwstweg ");
         System.out.println(l);
     }
     public static int myAtoi(String s) {
@@ -24,7 +24,7 @@ public class JavaDemoP {
             {
                 positionNumber = a != '-';
             }
-            else if(Character.isDigit(str.charAt(i))) {
+            else if(Character.isDigit(a)) {
                 ans = ans*10 + a - '0';
                 ans = positionNumber ? Math.min(ans, Integer.MAX_VALUE) : Math.min(ans, -(long) Integer.MIN_VALUE);
             }
