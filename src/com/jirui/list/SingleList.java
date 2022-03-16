@@ -10,7 +10,11 @@ import java.util.ArrayList;
 public class SingleList<T> {
     private int count=0;      // 链表长度
     private Node root = new Node(null,null);      // 根节点
-    private Node vrNode = new Node(null, root);
+    private Node vrNode;
+
+    public SingleList() {
+        this.vrNode = new Node(null, root);
+    }
 
     /**
      * 判断链表为空
@@ -146,10 +150,10 @@ public class SingleList<T> {
     }
 
     /**
-     * 翻转链表
+     * 翻转全部链表
      */
-    public void reserve(int start, int end){
-        if(count==0 ||isEmpty() || start>count  || end >count){
+    public void reserve(){
+        if(count==0 ||isEmpty()){
             System.out.println("链表为空");
             return;
         }
@@ -161,11 +165,78 @@ public class SingleList<T> {
             head.next = preNode;
             preNode = head;
             head = next;
-
         }
         root = preNode;
+        vrNode.next = root;
+    }
 
-
+    /**
+     * 翻转部分列表、方法一：
+     * @param start
+     * @param end
+     */
+    public void reserve(int start, int end){
+        if(count==0 ||isEmpty() || start>count  || end >count){
+            System.out.println("链表为空");
+            return;
+        }
+        vrNode.next = root;
+        Node preNode = vrNode;
+        Node next = null;
+        for(int i=0;i<start;i++){
+            preNode = preNode.next;
+        }
+        Node head = preNode.next;
+        for(int i=0;i<end-start;i++){
+            next = head.next;
+            head.next = next.next;
+            next.next = preNode.next;
+            preNode.next = next;
+        }
+        if(start==0){
+            root = next;
+        }
+    }
+    /**
+     * 翻转部分列表、方法二：
+     * @param start 开始位置
+     * @param end 结束位置
+     * @param use2  使用方法2
+     */
+    public void reserve(int start, int end,boolean use2){
+        if(count==0 ||isEmpty() || start>count  || end >count){
+            System.out.println("链表为空");
+            return;
+        }
+        vrNode.next = root;
+        Node preNode = vrNode;
+        Node headNode = preNode;
+        Node tailNode = new Node(null,null);
+        // 获取子链 将链表分为三部分；
+        for(int i=0;i<count;i++){
+            if(i == start-1)
+                headNode = preNode.next;
+            else if (i == end+1){
+                tailNode = preNode.next;
+                break;
+            }
+            preNode = preNode.next;
+        }
+        Node head = headNode.next;
+        Node next;
+        // 重要步骤
+        Node pre = tailNode;
+        for(int i=0;i<end-start+1;i++){
+            next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        headNode.next = pre;
+        if(start==0){
+            root=pre;
+            vrNode = root;
+        }
     }
 
     /**
@@ -198,19 +269,19 @@ public class SingleList<T> {
 
     public static void main(String[] args) {
         SingleList<Integer> singleList = new SingleList<>();
+        singleList.add(0);
         singleList.add(1);
         singleList.add(2);
         singleList.add(3);
         singleList.add(4);
+        singleList.add(5);
+        singleList.add(6);
+        singleList.add(7);
+        singleList.add(8);
+        singleList.add(9);
         singleList.print();
-        singleList.reserve(0,3);
+        singleList.reserve(0,5,true);
         singleList.print();
-        singleList.delete(3);
-        singleList.print();
-        singleList.add(5,1);
-        singleList.print();
-        Integer integer = singleList.get(1);
-        System.out.println(integer);
     }
 
 }
