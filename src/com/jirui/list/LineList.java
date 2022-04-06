@@ -1,4 +1,4 @@
-package cn.dataStruct.o1;
+package com.jirui.list;
 
 public class LineList {
     private int length;
