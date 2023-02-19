@@ -10,10 +10,10 @@ import java.util.ArrayList;
 public class SingleList<T> {
     private int count=0;      // 链表长度
     private Node root = new Node(null,null);      // 根节点
-    private Node vrNode;
+    private Node dummyHead; // 虚拟头结点
 
-    public SingleList() {
-        this.vrNode = new Node(null, root);
+    public  SingleList() {
+        this.dummyHead = new Node(null, root);
     }
 
     /**
@@ -153,21 +153,21 @@ public class SingleList<T> {
      * 翻转全部链表
      */
     public void reserve(){
-        if(count==0 ||isEmpty()){
+        if(isEmpty()){
             System.out.println("链表为空");
             return;
         }
         Node preNode = null;
         Node head = this.root;
-        Node next;
+        Node tmp;
         while(head!=null){
-            next = head.next;
+            tmp = head.next;
             head.next = preNode;
             preNode = head;
-            head = next;
+            head = tmp;
         }
         root = preNode;
-        vrNode.next = root;
+        dummyHead.next = root;
     }
 
     /**
@@ -180,8 +180,8 @@ public class SingleList<T> {
             System.out.println("链表为空");
             return;
         }
-        vrNode.next = root;
-        Node preNode = vrNode;
+        dummyHead.next = root;
+        Node preNode = dummyHead;
         Node next = null;
         for(int i=0;i<start;i++){
             preNode = preNode.next;
@@ -208,8 +208,8 @@ public class SingleList<T> {
             System.out.println("链表为空");
             return;
         }
-        vrNode.next = root;
-        Node preNode = vrNode;
+        dummyHead.next = root;
+        Node preNode = dummyHead;
         Node headNode = preNode;
         Node tailNode = new Node(null,null);
         // 获取子链 将链表分为三部分；
@@ -222,6 +222,7 @@ public class SingleList<T> {
             }
             preNode = preNode.next;
         }
+
         Node head = headNode.next;
         Node next;
         // 重要步骤
@@ -235,7 +236,7 @@ public class SingleList<T> {
         headNode.next = pre;
         if(start==0){
             root=pre;
-            vrNode = root;
+            dummyHead = root;
         }
     }
 
@@ -265,6 +266,86 @@ public class SingleList<T> {
             this.data = data;
             this.next = next;
         }
+        public Node() {
+
+        }
+    }
+
+    /**
+     * 链表两两交换位置
+     */
+    public void swapPairs(){
+        dummyHead.next = root;
+        Node head = dummyHead;
+        Node temp1;
+        Node tmp2 ;
+        Node nextHead;
+
+        while(head.next != null && head.next.next!=null){
+            temp1 = head.next;
+            tmp2 = head.next.next;
+            nextHead = head.next.next.next;
+            head.next = tmp2;
+            tmp2.next = temp1;
+            temp1.next = nextHead;
+            head = temp1;
+
+        }
+        root = dummyHead.next;
+
+    }
+
+    /**
+     * 双指针删除倒数第n个节点。用快指针先走n个，然后快慢指针一起往前再走知道快指针指向空节点，则慢指针所在地就是应该删除的地方。
+     */
+    public void removeNthFromEnd(int index){
+        if(index<=0){
+            return;
+        }
+        dummyHead.next = root;
+        Node head = dummyHead;
+        Node fast = head.next;
+        Node low = head.next;
+        for(int i=0;i<index;i++){
+            if(fast!=null){
+                fast = fast.next;
+            }else{
+                return;
+            }
+        }
+        while(fast.next!=null){
+            fast = fast.next;
+            low = low.next;
+        }
+        low.next = low.next.next;
+
+    }
+
+
+    /**
+     * 判断链表有环，且找到环的入口。
+     * @param head
+     * @return
+     */
+    public Node detectCycle(Node head){
+        Node fast = head;
+        Node low = head;
+        while(fast!=null && fast.next!=null){
+            fast = fast.next.next;
+            low = low.next;
+            if(fast== low){ //有环
+                Node index1 = fast;
+                Node index2 = head;
+                while(index2 != index1){
+                    index2 = index2.next;
+                    index1 = index1.next;
+                }
+                return index2;
+
+            }
+        }
+        return null;
+
     }
 
     public static void main(String[] args) {
@@ -280,8 +361,11 @@ public class SingleList<T> {
         singleList.add(8);
         singleList.add(9);
         singleList.print();
-        singleList.reserve(0,5,true);
+        singleList.removeNthFromEnd(0);
         singleList.print();
     }
+
+
+
 
 }

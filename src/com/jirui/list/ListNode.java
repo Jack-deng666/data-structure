@@ -12,10 +12,10 @@ class ListNode<T> {
     private Node root;		 //标识根节点
 
     //链接点类,内部方法实现，外部使用
-    private class Node{
+    public class Node{
 
-        private T data;		//数据信息
-        private Node next;	//下一个节点引用
+        public T data;		//数据信息
+        public Node next;	//下一个节点引用
 
         public Node(T data) {
             this.data = data;
@@ -35,9 +35,6 @@ class ListNode<T> {
 
             if(ListNode.this.foot++ == index){
                 previous.next = this.next;	//this表示当前要删除的节点
-                this.next = null;
-                ListNode.this.count--;
-                return;
             }else{
                 this.next.remove(this,index);	//递归删除
             }
@@ -50,12 +47,9 @@ class ListNode<T> {
                 previous.next = this.next;
                 this.next = null;
                 ListNode.this.count--;
-                return ;
             }else{
                 if(this.next != null){
                     this.next.remove(this,data);
-                }else{
-                    return;
                 }
             }
         }
